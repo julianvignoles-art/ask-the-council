@@ -1,12 +1,13 @@
 <h1>ask-the-council</h1>
 
-> **Status: v1.0.1, two known issues from testing fixed and reverified.** The audit seat now has
-> exactly two outcomes for an external fact — checked-and-cited, or dropped from the panel's
-> reasoning — closing a gap where it could wave a claim through as "verified against general
-> knowledge." Quick mode's three seat lines are now mandatory with a literal required shape. Both
-> confirmed fixed across 7 fresh test runs (`evals/runs/iteration-2/`). Still open: `examples/`
-> isn't built yet, and one eval (technical scoping) has been observed routing inconsistently
-> between quick mode and the full panel on the same prompt — noted, not yet resolved.
+> **Status: v1.1.0, three testing findings fixed and reverified.** The audit seat now has exactly
+> two outcomes for an external fact — checked-and-cited, or dropped from the panel's reasoning —
+> closing a gap where it could wave a claim through as "verified against general knowledge." Quick
+> mode's three seat lines are mandatory with a literal required shape. And the routing gate that
+> chooses quick mode vs. the full panel is now a mechanical, repeatable test with a visible `Mode:`
+> line on every output, after testing found the same prompt could route either way on different
+> runs. See [Limitations](#limitations) for what this skill still doesn't do. `examples/` isn't
+> built yet — next up.
 
 A Claude skill for running a decision through a fixed panel of perspectives built to disagree
 with each other, then synthesizing the disagreement into one recommendation — instead of asking
@@ -65,6 +66,30 @@ surfaced to the user as a caveat. Full contract:
 No memory across decisions in v1 — it won't tell you that you decided the opposite thing three
 weeks ago. That's the obvious v2 feature; leaving it out keeps this skill portable (clone the
 repo, it works, no local state file to seed).
+
+## Limitations
+
+<a id="limitations"></a>
+Naming what this skill doesn't do, on purpose — a repo that only lists wins isn't credible.
+
+**On at least one tested decision, it doesn't beat a plain, skill-less Claude.** The
+wrong-question test (`evals/evals.json` eval 3 — "should I switch from Notion to Obsidian") was
+built to show the Framer catching a reframe a baseline would miss. It doesn't: run 4 times
+independently with no skill installed, plain Claude reframed the same premise (survivorship bias
+in "people who stick with note-taking use Obsidian") every single time, before any feature
+comparison. That's not a fluke — 4 for 4 is a pattern, not luck. What the council adds on a
+decision like this isn't catching something invisible to a baseline; it's doing it in a
+consistent, structured, repeatable format with a forced consensus-check and an audited factual
+pass, every time, regardless of how the model happens to be feeling that day. That's a real value
+proposition. It is a different one than "sees what you can't," and this repo isn't going to claim
+the stronger one where the data doesn't support it.
+
+**It's stateless** (see above) — no memory of past decisions, on purpose, for now.
+
+**The Specialist seat is a generalist pretending to know one domain**, not a real expert. It's
+seated rarely and the Chair says which specialty it picked so it can be overridden, but treat any
+domain-specific claim it makes with the same skepticism you'd give a knowledgeable friend, not a
+professional.
 
 ## Building your own skill
 
