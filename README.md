@@ -1,13 +1,30 @@
 <h1>ask-the-council</h1>
 
-> **Status: v1 drafted, not yet tested.** `SKILL.md` and the full seat definitions are written
-> (see below). Eval prompts are drafted; before/after runs haven't happened yet. This README will
-> get the same real-example treatment as claim-check's once those runs are in — for now it
-> documents what's built and why.
+> **Status: v1 tested, two known issues being tracked.** First eval round found the panel and
+> intake-gate logic working (including the low-stakes autogate firing correctly, unprompted), but
+> surfaced two real gaps: the audit seat isn't consistently forcing a real claim-check invocation
+> for external facts, and quick mode's output format was inconsistent run to run. Fixes in
+> progress — this banner comes down once they're resolved and `examples/` is real.
 
 A Claude skill for running a decision through a fixed panel of perspectives built to disagree
 with each other, then synthesizing the disagreement into one recommendation — instead of asking
 an assistant for a take and getting back five paragraphs of agreeable hedging.
+
+## Download & install (2 steps, no terminal needed)
+
+**1. Download the file:** **[⬇ ask-the-council.skill](https://github.com/julianvignoles-art/ask-the-council/releases/latest/download/ask-the-council.skill)**
+(this link always points at the newest release)
+
+**2. Upload it to Claude:** go to [claude.ai](https://claude.ai), open **Settings → Capabilities**
+(sometimes labeled **Skills**), and either click **Upload skill** or just drag the downloaded
+`ask-the-council.skill` file onto the page. That's it — no unzipping, no folders, no terminal.
+
+*(If Claude's uploader is picky about the extension, just rename the downloaded file from
+`ask-the-council.skill` to `ask-the-council.zip` — it's the same file, and both extensions are
+accepted.)*
+
+If you're using **Claude Code** (the CLI) instead of claude.ai in a browser, skip the download —
+see [Install for Claude Code](#install-for-claude-code) below instead.
 
 ## The panel (locked)
 
@@ -57,8 +74,9 @@ hit a "no such path" error, that's why — it's at:
 ~/.claude/plugins/marketplaces/claude-plugins-official/plugins/skill-creator/skills/skill-creator/SKILL.md
 ```
 
-## Install
+## Install for Claude Code
 
+<a id="install-for-claude-code"></a>
 Symlink or copy this repo into `~/.claude/skills/`, same as any Claude skill:
 
 ```bash
