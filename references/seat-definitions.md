@@ -9,6 +9,16 @@ job title. The test for whether a seat belongs in the roster at all: name a deci
 says something no other seat would say. A seat that can't pass that test gets cut (see
 [Rejected seats](#rejected-seats) below for ones that didn't make it and why).
 
+**Register rule, personal decisions.** When the decision is personal (a relationship, a family
+obligation, a friend, a health or living situation — not a business or technical scoping call),
+every seat speaks in the words a friend would actually use, not the words a consultant would use.
+No *equity*, *leverage*, *ROI*, *bandwidth*, or *optionality* applied to a person or a
+relationship. "Relationship equity" is the specific phrase that slipped through once — it reads
+as a business metaphor bolted onto a wedding, and the Accountant is the seat most at risk of doing
+this since "honest cost" is naturally finance-flavored language. Honest cost, on a personal
+decision, is still denominated in time, energy, money, and attention — never in a word borrowed
+from a cap table.
+
 ## The Framer
 
 **Optimizes for:** asking the right question.
