@@ -1,34 +1,69 @@
 {
   "skill_name": "ask-the-council",
-  "notes": "Prompts only, no expectations yet -- per the build plan, show these to Julian for a yes before running. Cases 2 and 3 are the real tests (personal framing, wrong-question detection); case 1 will likely pass regardless; case 4 tests the low-stakes auto-gate into quick mode without the user saying 'quick council'.",
+  "notes": "Run plan: eval 3 (wrong-question-detection) runs paired -- with-skill + no-skill baseline -- since Notion vs Obsidian is the one case where a baseline is actually informative (plain Claude will compare the two apps feature-by-feature and never question whether the tool is the problem; Framer catching that while the baseline doesn't is the strongest single example this skill will produce). Evals 1, 2, and 4 run single-agent, with-skill only, per the plan. Eval 2's subject was swapped from a Senegal NGO trip to a generic destination-wedding-during-exam-week scenario -- the repo is public and examples/ is the selling surface; a stranger reading the original learns about the author instead of about the skill. Same shape (personal decision, external event colliding with a school obligation), no autobiography. Watching eval 4 closest: nothing in its prompt says 'quick council', so if the full six-seat panel convenes anyway, the intake gate isn't gating and that's a v1 bug, not a tuning issue. Grading is qualitative per the plan, but mechanical things are asserted: every required output section present, the objection section non-empty, seats capped at 3 sentences (checked via each run's transcript, since the skill's default output shows only the Chair's final block, not individual seats), and whether the consensus-flag mechanism actually fires on any run where all six seats converge.",
   "evals": [
     {
       "id": 1,
       "name": "technical-scoping-decision",
       "prompt": "My Raspberry Pi life dashboard is a pile of Python scripts at this point and every new feature takes longer to bolt on than the last one. Should I do a full rewrite in something more structured, or just keep patching the Python version?",
       "expected_output": "Checks that Builder and Accountant differentiate instead of converging on the same take -- Builder should push toward a small, fast-information move (rewrite one module, not the whole thing) while Accountant should price out the real cost of a full rewrite including ongoing maintenance. A technical decision is the easy case; if the seats sound identical here the panel design has a real problem.",
-      "files": []
+      "files": [],
+      "run_mode": "single-agent, with-skill only",
+      "expectations": [
+        "Output contains every required section from the fixed template: Decision, Confidence, Why (numbered reasons), Strongest objection, Why it loses, What would flip this, Do this first",
+        "The Strongest objection section is non-empty and is a real substantive objection, not a restatement of the Decision",
+        "Per the transcript, Builder's and Accountant's actual seat contributions are substantively different from each other -- not the same take in different words",
+        "Per the transcript, each seat's contribution is 3 sentences or fewer",
+        "The full six-seat panel convenes (this decision is not obviously reversible/low-stakes, so the quick-mode gate should NOT fire here)"
+      ]
     },
     {
       "id": 2,
       "name": "personal-decision-no-business-framing",
-      "prompt": "I got asked to join a trip back to Senegal in March with the NGO I worked with last summer, but it overlaps with finals month of senior year. Should I go?",
-      "expected_output": "The real test of whether the seats stay in register for a personal, emotionally weighted decision instead of lapsing into boardroom language ('stakeholder alignment', 'ROI', 'resourcing'). If any seat sounds like it's talking about a product launch, that's a failure. The Stakeholder seat in particular needs to talk about parents/teachers/the NGO as real people with real reactions, not 'stakeholders.'",
-      "files": []
+      "prompt": "A close friend of mine is getting married at a destination wedding, and the date falls right in the middle of exam week senior year. Should I go?",
+      "expected_output": "The real test of whether the seats stay in register for a personal, emotionally weighted decision instead of lapsing into boardroom language ('stakeholder alignment', 'ROI', 'resourcing'). If any seat sounds like it's talking about a product launch, that's a failure. The Stakeholder seat in particular needs to talk about the friend/parents/teachers as real people with real reactions, not 'stakeholders.'",
+      "files": [],
+      "run_mode": "single-agent, with-skill only",
+      "expectations": [
+        "Output contains every required section from the fixed template",
+        "The Strongest objection section is non-empty",
+        "No seat's language reads as boardroom/corporate (no 'stakeholder alignment', 'ROI', 'resourcing', 'deliverables', etc.) anywhere in the transcript or output",
+        "The Stakeholder seat's contribution names real people in this scenario (the friend, parents, teachers) rather than generic 'stakeholders'",
+        "Per the transcript, each seat's contribution is 3 sentences or fewer"
+      ]
     },
     {
       "id": 3,
       "name": "wrong-question-detection",
       "prompt": "Should I switch from Notion to Obsidian for my notes? I keep hearing Obsidian is better for people who actually stick with note-taking.",
-      "expected_output": "The Framer should catch that the tool isn't the actual decision -- the real question is whether a note-taking habit exists at all, not which app hosts it. Failure looks like the panel dutifully weighing Notion vs. Obsidian feature-by-feature without anyone naming that the tool swap probably isn't what's broken.",
-      "files": []
+      "expected_output": "The Framer should catch that the tool isn't the actual decision -- the real question is whether a note-taking habit exists at all, not which app hosts it. Failure looks like the panel dutifully weighing Notion vs. Obsidian feature-by-feature without anyone naming that the tool swap probably isn't what's broken. Baseline (no skill) is expected to just compare the two apps and never raise this.",
+      "files": [],
+      "run_mode": "PAIRED -- with-skill agent + no-skill baseline agent, same prompt",
+      "expectations": [
+        "Output contains every required section from the fixed template",
+        "The Strongest objection section is non-empty",
+        "Per the transcript, the Framer's contribution explicitly names the real question as the note-taking habit, not the app choice",
+        "The Decision or Why section reflects the reframe (addresses the habit question), not just a Notion-vs-Obsidian feature comparison",
+        "Per the transcript, each seat's contribution is 3 sentences or fewer",
+        "Baseline (no skill) is expected to compare the two apps directly and NOT question whether the tool itself is the problem -- this is the point of the paired run, not a bug in the baseline"
+      ]
     },
     {
       "id": 4,
       "name": "low-stakes-reversible-autogate",
       "prompt": "Should I try switching my main browser from Chrome to Arc for a week to see if I like it?",
-      "expected_output": "Tests the Step 1 intake gate, not the user typing 'quick council' -- this is a fully reversible, low-stakes decision, and the skill itself should recognize that and drop into quick mode (or something close to it) without being asked. Failure looks like the full six-seat panel plus audit seat producing 800 words for a decision that costs nothing to reverse.",
-      "files": []
+      "expected_output": "Tests the Step 1 intake gate, not the user typing 'quick council' -- this is a fully reversible, low-stakes decision, and the skill itself should recognize that and drop into quick mode (or something close to it) without being asked. Failure looks like the full six-seat panel plus audit seat producing 800 words for a decision that costs nothing to reverse. THE ONE TO WATCH CLOSEST: if the full panel convenes here, the intake gate isn't gating -- that's a v1 bug, not a tuning issue.",
+      "files": [],
+      "run_mode": "single-agent, with-skill only",
+      "expectations": [
+        "Quick mode (or something functionally equivalent -- 3 seats, not 6) fires WITHOUT the user typing 'quick council' or 'fast take'",
+        "Output is short -- roughly 10 lines, not an 800-word full-panel writeup",
+        "Output still contains the required decision-block sections even in quick mode",
+        "If the full six-seat panel convenes instead of quick mode, this is flagged explicitly as a v1 bug in the intake gate, not graded as a tuning nitpick"
+      ]
     }
+  ],
+  "cross_run_checks": [
+    "On any run where the transcript shows all six full-panel seats converging on the same recommendation, check whether the consensus-flag mechanism (Step 3) actually fired -- explicit statement that unanimous agreement is a flag, and a forced strongest-objection from the Skeptic specifically. This is conditional (only applies if consensus actually happened in a given run), not a universal pass/fail."
   ]
 }
