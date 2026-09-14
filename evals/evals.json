@@ -1,20 +1,21 @@
 {
   "skill_name": "ask-the-council",
-  "notes": "Run plan: eval 3 (wrong-question-detection) runs paired -- with-skill + no-skill baseline -- since Notion vs Obsidian is the one case where a baseline is actually informative (plain Claude will compare the two apps feature-by-feature and never question whether the tool is the problem; Framer catching that while the baseline doesn't is the strongest single example this skill will produce). Evals 1, 2, and 4 run single-agent, with-skill only, per the plan. Eval 2's subject was swapped from a Senegal NGO trip to a generic destination-wedding-during-exam-week scenario -- the repo is public and examples/ is the selling surface; a stranger reading the original learns about the author instead of about the skill. Same shape (personal decision, external event colliding with a school obligation), no autobiography. Watching eval 4 closest: nothing in its prompt says 'quick council', so if the full six-seat panel convenes anyway, the intake gate isn't gating and that's a v1 bug, not a tuning issue. Grading is qualitative per the plan, but mechanical things are asserted: every required output section present, the objection section non-empty, seats capped at 3 sentences (checked via each run's transcript, since the skill's default output shows only the Chair's final block, not individual seats), and whether the consensus-flag mechanism actually fires on any run where all six seats converge.",
+  "notes": "Run plan: eval 3 (wrong-question-detection) runs paired -- with-skill + no-skill baseline. Evals 1, 2, and 4 run single-agent, with-skill only. Eval 2's subject was swapped from a Senegal NGO trip to a generic destination-wedding-during-exam-week scenario -- no autobiography in a public portfolio repo. Eval 1's prompt was rewritten from a no-deadline hobby project to a client-deadline scenario after iteration 2 found the original routed inconsistently (full panel once, quick mode once, identical prompt) -- an unambiguous one-way door was needed for the eval to reliably exercise the Accountant seat it's built to test. Every eval now asserts the Mode line (added this round to make routing visible and reviewable, not just internally consistent). Eval 3's baseline result is settled, not open: 4 of 4 independent no-skill runs reframed the premise on their own, so grade the with-skill run on consistency/structure/audit value, not on catching something the baseline misses -- it doesn't, reliably. Grading is qualitative per the plan, but mechanical things are asserted: every required section present, objection non-empty, seats capped at 3 sentences, the Mode line present and accurate, and whether the consensus-flag mechanism fires on any run where all seats converge.",
   "evals": [
     {
       "id": 1,
       "name": "technical-scoping-decision",
-      "prompt": "My Raspberry Pi life dashboard is a pile of Python scripts at this point and every new feature takes longer to bolt on than the last one. Should I do a full rewrite in something more structured, or just keep patching the Python version?",
-      "expected_output": "Checks that Builder and Accountant differentiate instead of converging on the same take -- Builder should push toward a small, fast-information move (rewrite one module, not the whole thing) while Accountant should price out the real cost of a full rewrite including ongoing maintenance. A technical decision is the easy case; if the seats sound identical here the panel design has a real problem.",
+      "prompt": "I'm three weeks into a freelance automation project for a client, with a contract deadline six weeks out. The codebase has turned into a tangle of global state, and every new feature the client asks for takes longer to add than the last one. Should I stop now and do a full rewrite with the structure it needs, or keep patching to make sure I hit the deadline?",
+      "expected_output": "Checks that Builder and Accountant differentiate instead of converging on the same take -- Builder should push toward a small, fast-information move while Accountant should price out the real cost of a full rewrite against the remaining six weeks. Rewritten from the original Pi-dashboard version specifically to be an unambiguous one-way door: a contract deadline and a paying client make this genuinely high-stakes and not cheaply reversible, so it should route to the full panel reliably rather than bordering the quick-mode gate the way a no-stakes hobby-project version did. The Accountant seat must actually convene for this eval to test what it's built to test -- if it routes to quick mode, the eval has failed to do its job regardless of the recommendation's quality.",
       "files": [],
       "run_mode": "single-agent, with-skill only",
       "expectations": [
+        "Mode line at the top reads 'full panel' with a stated reason (the contract deadline / client stakes / not cheaply reversible)",
         "Output contains every required section from the fixed template: Decision, Confidence, Why (numbered reasons), Strongest objection, Why it loses, What would flip this, Do this first",
         "The Strongest objection section is non-empty and is a real substantive objection, not a restatement of the Decision",
-        "Per the transcript, Builder's and Accountant's actual seat contributions are substantively different from each other -- not the same take in different words",
-        "Per the transcript, each seat's contribution is 3 sentences or fewer",
-        "The full six-seat panel convenes (this decision is not obviously reversible/low-stakes, so the quick-mode gate should NOT fire here)"
+        "Builder's and Accountant's actual contributions to the reasoning are substantively different from each other -- not the same take in different words",
+        "Each seat's contribution is 3 sentences or fewer",
+        "The full six-seat panel convenes -- this is now the primary, load-bearing check for this eval, not a secondary note. Quick mode firing here means the eval cannot test what it exists to test, independent of whether the actual decision block looks reasonable."
       ]
     },
     {
@@ -25,11 +26,12 @@
       "files": [],
       "run_mode": "single-agent, with-skill only",
       "expectations": [
+        "Mode line at the top reads 'full panel' with a stated reason (missing a wedding and academic risk are both not cheaply reversible)",
         "Output contains every required section from the fixed template",
         "The Strongest objection section is non-empty",
-        "No seat's language reads as boardroom/corporate (no 'stakeholder alignment', 'ROI', 'resourcing', 'deliverables', etc.) anywhere in the transcript or output",
+        "No seat's language reads as boardroom/corporate (no 'stakeholder alignment', 'ROI', 'resourcing', 'deliverables', 'equity', 'leverage', 'bandwidth', 'optionality', etc.) anywhere in the output",
         "The Stakeholder seat's contribution names real people in this scenario (the friend, parents, teachers) rather than generic 'stakeholders'",
-        "Per the transcript, each seat's contribution is 3 sentences or fewer"
+        "Each seat's contribution is 3 sentences or fewer"
       ]
     },
     {
@@ -40,12 +42,13 @@
       "files": [],
       "run_mode": "PAIRED -- with-skill agent + no-skill baseline agent, same prompt",
       "expectations": [
+        "Mode line at the top reads 'quick' with a stated reason (a note-taking app switch is cheap, reversible, and bounded)",
         "Output contains every required section from the fixed template",
         "The Strongest objection section is non-empty",
-        "Per the transcript, the Framer's contribution explicitly names the real question as the note-taking habit, not the app choice",
+        "The Framer's contribution explicitly names the real question as the note-taking habit, not the app choice",
         "The Decision or Why section reflects the reframe (addresses the habit question), not just a Notion-vs-Obsidian feature comparison",
-        "Per the transcript, each seat's contribution is 3 sentences or fewer",
-        "Baseline (no skill) is expected to compare the two apps directly and NOT question whether the tool itself is the problem -- this is the point of the paired run, not a bug in the baseline"
+        "Each seat's contribution is 3 sentences or fewer",
+        "KNOWN, not a failure condition: across 4 independent no-skill baseline runs (iteration 1 + 3 more in iteration 2), all 4 reframed the premise on their own (survivorship bias). Baseline reframing is the established, reliable behavior here, not a bug -- don't grade a baseline run as having failed if it reframes; grade the with-skill run on consistency/structure/audit, not on catching something the baseline provably also catches."
       ]
     },
     {
@@ -56,14 +59,16 @@
       "files": [],
       "run_mode": "single-agent, with-skill only",
       "expectations": [
+        "Mode line at the top reads 'quick' with a stated reason (a one-week reversible browser trial, near-zero cost)",
         "Quick mode (or something functionally equivalent -- 3 seats, not 6) fires WITHOUT the user typing 'quick council' or 'fast take'",
-        "Output is short -- roughly 10 lines, not an 800-word full-panel writeup",
+        "Output is short -- roughly 12 lines with the Mode line, not an 800-word full-panel writeup",
         "Output still contains the required decision-block sections even in quick mode",
         "If the full six-seat panel convenes instead of quick mode, this is flagged explicitly as a v1 bug in the intake gate, not graded as a tuning nitpick"
       ]
     }
   ],
   "cross_run_checks": [
-    "On any run where the transcript shows all six full-panel seats converging on the same recommendation, check whether the consensus-flag mechanism (Step 3) actually fired -- explicit statement that unanimous agreement is a flag, and a forced strongest-objection from the Skeptic specifically. This is conditional (only applies if consensus actually happened in a given run), not a universal pass/fail."
+    "On any run where the transcript shows all six full-panel seats converging on the same recommendation, check whether the consensus-flag mechanism (Step 3) actually fired -- explicit statement that unanimous agreement is a flag, and a forced strongest-objection from the Skeptic specifically. This is conditional (only applies if consensus actually happened in a given run), not a universal pass/fail.",
+    "ROUTING DETERMINISM: re-running the same prompt (especially eval 1, post-rewrite) should produce the same Mode line every time. Eval 1's original version (a no-deadline hobby project) routed to full panel in iteration 1 and quick mode in iteration 2 on an identical prompt -- that inconsistency, not the eval's surface content, was the actual finding. The rewritten prompt plus the Step 1 mechanical gate and ties-go-to-full-panel rule are both meant to fix this; if a future rerun of eval 1 ever produces 'Mode: quick', that is the regression to investigate first."
   ]
 }
