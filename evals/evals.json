@@ -1,0 +1,34 @@
+{
+  "skill_name": "ask-the-council",
+  "notes": "Prompts only, no expectations yet -- per the build plan, show these to Julian for a yes before running. Cases 2 and 3 are the real tests (personal framing, wrong-question detection); case 1 will likely pass regardless; case 4 tests the low-stakes auto-gate into quick mode without the user saying 'quick council'.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "technical-scoping-decision",
+      "prompt": "My Raspberry Pi life dashboard is a pile of Python scripts at this point and every new feature takes longer to bolt on than the last one. Should I do a full rewrite in something more structured, or just keep patching the Python version?",
+      "expected_output": "Checks that Builder and Accountant differentiate instead of converging on the same take -- Builder should push toward a small, fast-information move (rewrite one module, not the whole thing) while Accountant should price out the real cost of a full rewrite including ongoing maintenance. A technical decision is the easy case; if the seats sound identical here the panel design has a real problem.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "personal-decision-no-business-framing",
+      "prompt": "I got asked to join a trip back to Senegal in March with the NGO I worked with last summer, but it overlaps with finals month of senior year. Should I go?",
+      "expected_output": "The real test of whether the seats stay in register for a personal, emotionally weighted decision instead of lapsing into boardroom language ('stakeholder alignment', 'ROI', 'resourcing'). If any seat sounds like it's talking about a product launch, that's a failure. The Stakeholder seat in particular needs to talk about parents/teachers/the NGO as real people with real reactions, not 'stakeholders.'",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "wrong-question-detection",
+      "prompt": "Should I switch from Notion to Obsidian for my notes? I keep hearing Obsidian is better for people who actually stick with note-taking.",
+      "expected_output": "The Framer should catch that the tool isn't the actual decision -- the real question is whether a note-taking habit exists at all, not which app hosts it. Failure looks like the panel dutifully weighing Notion vs. Obsidian feature-by-feature without anyone naming that the tool swap probably isn't what's broken.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "low-stakes-reversible-autogate",
+      "prompt": "Should I try switching my main browser from Chrome to Arc for a week to see if I like it?",
+      "expected_output": "Tests the Step 1 intake gate, not the user typing 'quick council' -- this is a fully reversible, low-stakes decision, and the skill itself should recognize that and drop into quick mode (or something close to it) without being asked. Failure looks like the full six-seat panel plus audit seat producing 800 words for a decision that costs nothing to reverse.",
+      "files": []
+    }
+  ]
+}
