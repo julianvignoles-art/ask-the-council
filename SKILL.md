@@ -23,10 +23,36 @@ ask about ones you can already infer.
 3. **Deadline.** Real, or self-imposed?
 4. **What "good" looks like in six months.**
 
-**If the decision is clearly reversible and low-stakes, skip straight to Quick Mode.** Running
-the full panel on "should I try the other coffee shop" is its own failure — an 800-word writeup
-for a decision that needed ten seconds is exactly the kind of ceremony this skill should never
-produce. Reversibility is the gate; use it.
+**The routing test, applied explicitly, not by feel.** An identical decision must route the same
+way every time it's asked — a gate that depends on mood or phrasing is invisible and untrustworthy.
+Quick Mode requires a clean "yes" to all three of these; anything else routes to the full panel:
+
+1. **Can it be undone in one step, cheaply, today, if it's wrong?** Not "eventually recoverable
+   with enough effort" — genuinely low-friction reversal: uninstall it, revert it, cancel it. A
+   decision that costs real time, money, or relationship capital to walk back is a "no" even if
+   it's technically undoable in principle.
+2. **Is the downside bounded and small?** Hours or minor money, not a grade, a job, a relationship,
+   health, or a client/contract commitment.
+3. **Would a full seat have something load-bearing and distinct to say?** If the Accountant's real
+   cost accounting, the Long View's compounding read, or the Stakeholder's third-party read would
+   plausibly change the recommendation, that's a full-panel signal on its own — even if 1 and 2
+   both look like quick-mode material.
+
+**Ties go to the full panel.** Convening four extra seats on a decision that turns out to be
+genuinely reversible costs a few paragraphs. Skipping the Accountant on a decision that had real
+weight is a missed catch, not a stylistic tradeoff — the failure modes are not symmetric, so the
+default when genuinely unsure is the more expensive option, not the cheaper one.
+
+**State the routing decision, don't just act on it.** Every output — quick mode or full panel —
+opens with one line naming which mode ran and why, before anything else:
+
+```
+Mode: [quick / full panel] — [one clause: what made this reversible-and-small, or what didn't]
+```
+
+This is not optional and not folded into the Confidence line — it's its own line, first, always.
+Routing that isn't stated is routing nobody can push back on, and a wrong routing call is
+invisible right up until someone reruns the exact same prompt and gets a different answer.
 
 ## Step 2 — Convene the panel
 
@@ -108,6 +134,8 @@ Step 4, and now produces exactly one output in this exact template — nothing b
 after it:
 
 ```
+Mode: full panel — [one clause: why this didn't clear the quick-mode bar]
+
 **Decision:** [one sentence, imperative]
 **Confidence:** [high / medium / low] — [why, in one clause]
 
@@ -134,6 +162,8 @@ Triggered by "quick council" or "fast take" (or automatically, per Step 1, when 
 clearly reversible and low-stakes). Always this exact shape, nothing more, nothing less:
 
 ```
+Mode: quick — [one clause: what made this reversible and small]
+
 Framer: [one sentence]
 Skeptic: [one sentence]
 Builder: [one sentence]
@@ -151,7 +181,8 @@ clauses stacked with commas.** If a seat's real point doesn't fit in one sentenc
 this decision may not have been as clearly low-stakes as Step 1's gate assumed — reconsider
 whether quick mode was the right call before compressing harder.
 
-Ten lines total (3 seat lines + up to 7 in the decision block), no exceptions.
+Twelve lines total (1 mode line + 3 seat lines + up to 7 in the decision block, plus the two
+blank-line separators), no exceptions.
 
 These three specifically: Framer catches the wrong-question failure, which is most of what makes
 a fast answer wrong anyway; Skeptic catches the one obvious landmine; Builder gets the user
@@ -164,3 +195,9 @@ Every time this skill gets edited, check that the output got shorter, not longer
 mode for a skill like this isn't underspecification, it's slow accretion of hedges and caveats
 until the ten-line quick mode is eleven paragraphs. If a change makes any seat's word count go up,
 that's a regression, not an improvement.
+
+The one exception on record: the `Mode:` line added to both templates. That's a deliberate,
+one-line addition to fix a real problem (routing was invisible, so a wrong or inconsistent
+routing call couldn't be caught without a rerun) — not the kind of accretion this note warns
+against. The test for future additions is the same one that justified this: does it let the user
+catch something they otherwise couldn't, in one clause? If not, it's drift.
