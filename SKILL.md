@@ -67,17 +67,39 @@ how the skill degrades into theater: six voices, one opinion, no actual scrutiny
 
 ## Step 4 — Audit seat
 
-Before the Chair synthesizes, run a fact pass over any factual claim a seat leaned on to make its
+Before the Chair synthesizes, find every external factual claim a seat leaned on to make its
 case — a statistic the Accountant cited, a "this always happens" the Skeptic asserted as
-precedent, a constraint the Specialist stated as settled. Opinions and predictions skip this
-pass; only the factual claims embedded in the panel's reasoning go through it.
+precedent, a constraint the Specialist stated as settled, a product fact the Builder relied on.
+Opinions and predictions skip this pass entirely; only claims that are checkable facts go through
+it.
 
-If the `claim-check` skill is installed, invoke it on those claims and use its output format and
-five statuses directly. If it isn't installed, do the same job by hand: for each factual claim a
-seat leaned on, name the specific source checked or mark it `UNSUPPORTED` — the verification
-discipline is what matters, not which tool applies it. Either way this must never surface to the
-user as a caveat about tooling; the audit happens, and it just shows up as a normal part of the
-output. Full contract and reasoning: [`references/audit-seat-contract.md`](references/audit-seat-contract.md).
+**An external factual claim has exactly two permitted outcomes. There is no third.**
+
+1. **Checked against a named source** — either the `claim-check` skill was invoked on it, or you
+   did a live lookup yourself and can name the specific source. Either way, the claim now carries
+   a citation, the same as claim-check's own rules require.
+2. **Dropped from the panel's reasoning entirely.** If it can't be checked, the seat that used it
+   rewrites its point without leaning on that claim. If the point genuinely can't be made without
+   it, that goes in the **Confidence** line of the Step 5 template — "medium — depends on an
+   unverified claim about X" — which is the one place the fixed template has room for it. It does
+   not get a new section of its own, and it does not get folded quietly into a seat's reasoning as
+   if it were settled.
+
+**"Verified against general knowledge" is a failure state, not a pass.** If you notice yourself
+about to write that phrase — or any equivalent ("this is well known," "this is standard," "as far
+as I recall") — stop. That sentence means no source was actually opened, and the claim belongs in
+outcome 2, not outcome 1. Recall feels identical whether it's right or wrong; that's exactly why
+it can't be the thing that gates whether a claim stays in the panel's reasoning.
+
+**A hedge is not outcome 2, and self-labeling a claim as unverified does not make it safe to use
+anyway.** Writing "this is unverified, but—" and then leaning on the claim regardless is worse
+than not labeling it at all, because it *reads* as rigorous while doing exactly what it warns
+against. If a claim can't be checked, it does not appear in the reasoning in hedged form; it is
+either checked or gone.
+
+This must never surface to the user as a caveat about tooling — whether claim-check ran or the
+check was done by hand is invisible to them; only the result (checked-and-cited, or dropped)
+shows up. Full contract and reasoning: [`references/audit-seat-contract.md`](references/audit-seat-contract.md).
 
 ## Step 5 — The Chair synthesizes
 
@@ -109,8 +131,27 @@ not a wrapper around it.
 ## Quick mode
 
 Triggered by "quick council" or "fast take" (or automatically, per Step 1, when the decision is
-clearly reversible and low-stakes). Three seats only — **Framer, Skeptic, Builder** — one
-sentence each. Then the same decision block as above. Ten lines total, no exceptions.
+clearly reversible and low-stakes). Always this exact shape, nothing more, nothing less:
+
+```
+Framer: [one sentence]
+Skeptic: [one sentence]
+Builder: [one sentence]
+
+[decision block, same template as Step 5]
+```
+
+**The three seat lines are mandatory, not optional, and never omitted.** This is not the full
+panel's rule (Step 5 suppresses individual seats by default) — quick mode is a different, shorter
+format with the seat lines built in, and an output that skips straight to the decision block
+without them is not quick mode, it's a truncated full-panel answer wearing quick mode's name.
+
+**One sentence means one sentence — not two joined with a semicolon or an em dash, not three
+clauses stacked with commas.** If a seat's real point doesn't fit in one sentence, that's a signal
+this decision may not have been as clearly low-stakes as Step 1's gate assumed — reconsider
+whether quick mode was the right call before compressing harder.
+
+Ten lines total (3 seat lines + up to 7 in the decision block), no exceptions.
 
 These three specifically: Framer catches the wrong-question failure, which is most of what makes
 a fast answer wrong anyway; Skeptic catches the one obvious landmine; Builder gets the user

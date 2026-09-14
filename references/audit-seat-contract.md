@@ -22,28 +22,47 @@ is worse than one that just does the degraded version of its own job.
 So: check once, at the start of the audit pass, whether `claim-check` is available (present in
 the skills list). Don't check per-claim, don't re-check mid-panel.
 
+## Exactly two outcomes — no third option
+
+This is the part that failed in practice, so it's stated here without room to read around it.
+Every external factual claim a seat leans on ends up in exactly one of two places:
+
+1. **Checked and cited.** A named source backs it — claim-check's own audit, or a source you
+   named yourself after actually opening it.
+2. **Gone.** Not checked, not usable. The seat's point gets rewritten without it, or (only if the
+   point can't survive the rewrite) the Chair's Confidence line names the unverified premise.
+
+There is no third bucket for "plausible," "well known," "as far as I recall," or "verified against
+general knowledge." **That last phrase specifically is a failure state, not a pass** — it means a
+claim was used without a source, dressed in language that sounds like a check happened. If a
+seat's reasoning is about to contain it, the claim it's attached to needs to move to outcome 2.
+
+**A hedge does not rescue a claim into outcome 1.** Labeling something "unverified" or "recalled,
+not confirmed live" and then using it anyway in the same paragraph is worse than not labeling it
+at all — it reads as diligence while doing exactly what the label warns against. Self-awareness
+that a claim is shaky is not the same as not using the claim.
+
 ## If claim-check is installed
 
 Invoke it on the claims identified above. Use its output format and its five statuses
 (`CONFIRMED` / `CONTRADICTED` / `PARTIAL` / `UNSUPPORTED` / `JUDGMENT`) as-is — don't reinvent a
-parallel classification scheme. Fold the resulting audit table into the council's output ahead of
-the Chair's synthesis, and let the Chair's confidence rating reflect what it found (a
-`CONTRADICTED` claim a seat leaned on should visibly lower confidence, not get quietly absorbed).
+parallel classification scheme. `CONFIRMED`/`CONTRADICTED`/`PARTIAL` land in outcome 1 (checked);
+`UNSUPPORTED` and `JUDGMENT` land in outcome 2 (gone from the reasoning, or explicitly flagged in
+Confidence if unavoidable). Let the Chair's confidence rating reflect what it found — a
+`CONTRADICTED` claim a seat leaned on should visibly lower confidence, not get quietly absorbed.
 
 ## If claim-check is not installed
 
 Do the same job by hand, inline, without announcing that a dependency is missing or suggesting
 the user go install something — that's a distraction from the decision they came here for.
-Concretely: for every factual claim a seat leaned on, name the specific source checked (a URL
-actually opened, a file actually read) or mark it `UNSUPPORTED`. The same non-negotiable rule
-applies here as anywhere else this problem shows up: if you can't name the source, the claim is
-unsupported. This inline version does not need claim-check's full five-step procedure — the
-panel already extracted and classified the claims by virtue of using them — it only needs the
-verification discipline itself, which is trivial to reapply directly.
+Concretely: for every factual claim a seat leaned on, either open a source and name it (outcome
+1), or the claim is gone (outcome 2). This inline version does not need claim-check's full
+five-step procedure — the panel already extracted and classified the claims by virtue of using
+them — it only needs the same two-outcomes discipline applied directly, by hand.
 
 ## What "graceful" means here, precisely
 
-Graceful degradation is not a hedge or a apology in the output. The user reading the Chair's
+Graceful degradation is not a hedge or an apology in the output. The user reading the Chair's
 final recommendation should not be able to tell, from the output alone, whether claim-check was
 installed — the audit either happened with the dedicated tool or happened by hand, but it always
 happened, and it always shows up as a normal part of the council's output rather than a caveat
