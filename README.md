@@ -1,14 +1,5 @@
 <h1>ask-the-council</h1>
 
-> **Status: v1.1.0, three testing findings fixed and reverified.** The audit seat now has exactly
-> two outcomes for an external fact — checked-and-cited, or dropped from the panel's reasoning —
-> closing a gap where it could wave a claim through as "verified against general knowledge." Quick
-> mode's three seat lines are mandatory with a literal required shape. And the routing gate that
-> chooses quick mode vs. the full panel is now a mechanical, repeatable test with a visible `Mode:`
-> line on every output, after testing found the same prompt could route either way on different
-> runs. See [Limitations](#limitations) for what this skill still doesn't do. `examples/` isn't
-> built yet — next up.
-
 A Claude skill for running a decision through a fixed panel of perspectives built to disagree
 with each other, then synthesizing the disagreement into one recommendation — instead of asking
 an assistant for a take and getting back five paragraphs of agreeable hedging.
@@ -28,6 +19,24 @@ accepted.)*
 
 If you're using **Claude Code** (the CLI) instead of claude.ai in a browser, skip the download —
 see [Install for Claude Code](#install-for-claude-code) below instead.
+
+## What it catches
+
+Asked "should I take Job A (15% more, brutal commute) or Job B (less pay, remote and sane)?", the
+Framer seat didn't just weigh the two offers — it caught a tell in the user's own wording:
+
+> "Notice you already named B 'saner' — some part of you has scored this already, and you might
+> be here for permission more than a decision."
+
+The panel then genuinely disagreed with itself: three seats leaned toward Job B for different
+reasons, the Long View opened a real, undefeated case for Job A, and two seats didn't take a side
+at all — pushing for cheap fact-finding instead. Because the disagreement was real, the
+consensus-check didn't fire (it's built to fire only when everyone agrees, which is treated as a
+red flag, not confirmation).
+
+Four full runs — including one where `claim-check` was physically removed to prove the audit
+seat's fallback path actually works, not just reads well — are in
+[`examples/council-sample-output.md`](examples/council-sample-output.md).
 
 ## The panel (locked)
 
@@ -53,13 +62,21 @@ expert.
 yourself is usually an artifact of how the question got framed — the Chair has to say so and
 force the Skeptic to make the strongest case against before finalizing.
 
-## The claim-check pairing (locked)
+## The claim-check pairing (locked, and proven)
 
 Before the Chair synthesizes, every factual claim a seat leaned on gets checked — via the
 `claim-check` skill (its own sibling repo) if it's installed, or by hand, inline, if it isn't.
 This skill has to work standalone; the dependency is never load-bearing and its absence is never
 surfaced to the user as a caveat. Full contract:
 [`references/audit-seat-contract.md`](references/audit-seat-contract.md).
+
+This isn't just a design promise — it's tested. `claim-check` was physically removed from the
+skills directory (not renamed; renaming doesn't disable a skill, it turns out) and a full run
+confirmed the fallback works: a live web lookup, sources named, no hedge. See Case 4 in
+[`examples/council-sample-output.md`](examples/council-sample-output.md) for the transcript,
+including an honest note the run itself flagged: the contract's "two equally available options"
+framing overclaims when claim-check is genuinely absent, since only one option is actually
+exercisable then. Left in verbatim rather than smoothed over.
 
 ## Stateless by design (locked, v1)
 
@@ -72,17 +89,19 @@ repo, it works, no local state file to seed).
 <a id="limitations"></a>
 Naming what this skill doesn't do, on purpose — a repo that only lists wins isn't credible.
 
-**On at least one tested decision, it doesn't beat a plain, skill-less Claude.** The
-wrong-question test (`evals/evals.json` eval 3 — "should I switch from Notion to Obsidian") was
-built to show the Framer catching a reframe a baseline would miss. It doesn't: run 4 times
+**On at least one tested decision, it didn't beat a plain, skill-less Claude — this is historical,
+about a prompt no longer in the eval suite, kept here because the finding itself is still true.**
+An earlier version of the wrong-question eval ("should I switch from Notion to Obsidian") was
+built to show the Framer catching a reframe a baseline would miss. It didn't: run 4 times
 independently with no skill installed, plain Claude reframed the same premise (survivorship bias
 in "people who stick with note-taking use Obsidian") every single time, before any feature
-comparison. That's not a fluke — 4 for 4 is a pattern, not luck. What the council adds on a
-decision like this isn't catching something invisible to a baseline; it's doing it in a
-consistent, structured, repeatable format with a forced consensus-check and an audited factual
-pass, every time, regardless of how the model happens to be feeling that day. That's a real value
-proposition. It is a different one than "sees what you can't," and this repo isn't going to claim
-the stronger one where the data doesn't support it.
+comparison. That prompt was later replaced for an unrelated reason (it turned out to be the
+Framer's own literal worked example, making it a retrieval test, not a generalization one — see
+`examples/council-sample-output.md`, Case 1). But the baseline finding predates that swap and
+isn't invalidated by it: on a well-known productivity-forum question like that one, a
+consistent, structured, repeatable format with a forced consensus-check is this skill's real
+value proposition, not "sees what a baseline can't." The current eval 3 (a job-offer scenario)
+hasn't been baseline-tested, so don't assume this finding transfers to it.
 
 **It's stateless** (see above) — no memory of past decisions, on purpose, for now.
 
