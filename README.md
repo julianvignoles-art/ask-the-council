@@ -1,10 +1,9 @@
 <h1>ask-the-council</h1>
 
-> **Status: scaffolded, not yet built.** The repo shape, the seat roster, and the claim-check
-> dependency contract are locked (see below). `SKILL.md` itself — the actual six-seat panel, the
-> Chair, the output template — is being authored and tested next. This README will get the same
-> before/after treatment as claim-check's once that's done; for now it documents what's decided
-> and why.
+> **Status: v1 drafted, not yet tested.** `SKILL.md` and the full seat definitions are written
+> (see below). Eval prompts are drafted; before/after runs haven't happened yet. This README will
+> get the same real-example treatment as claim-check's once those runs are in — for now it
+> documents what's built and why.
 
 A Claude skill for running a decision through a fixed panel of perspectives built to disagree
 with each other, then synthesizing the disagreement into one recommendation — instead of asking
@@ -60,8 +59,7 @@ hit a "no such path" error, that's why — it's at:
 
 ## Install
 
-Once `SKILL.md` lands, install the same way as any skill — symlink or copy this repo into
-`~/.claude/skills/`:
+Symlink or copy this repo into `~/.claude/skills/`, same as any Claude skill:
 
 ```bash
 ln -s /path/to/ask-the-council ~/.claude/skills/ask-the-council
