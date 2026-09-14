@@ -1,10 +1,12 @@
 <h1>ask-the-council</h1>
 
-> **Status: v1 tested, two known issues being tracked.** First eval round found the panel and
-> intake-gate logic working (including the low-stakes autogate firing correctly, unprompted), but
-> surfaced two real gaps: the audit seat isn't consistently forcing a real claim-check invocation
-> for external facts, and quick mode's output format was inconsistent run to run. Fixes in
-> progress — this banner comes down once they're resolved and `examples/` is real.
+> **Status: v1.0.1, two known issues from testing fixed and reverified.** The audit seat now has
+> exactly two outcomes for an external fact — checked-and-cited, or dropped from the panel's
+> reasoning — closing a gap where it could wave a claim through as "verified against general
+> knowledge." Quick mode's three seat lines are now mandatory with a literal required shape. Both
+> confirmed fixed across 7 fresh test runs (`evals/runs/iteration-2/`). Still open: `examples/`
+> isn't built yet, and one eval (technical scoping) has been observed routing inconsistently
+> between quick mode and the full panel on the same prompt — noted, not yet resolved.
 
 A Claude skill for running a decision through a fixed panel of perspectives built to disagree
 with each other, then synthesizing the disagreement into one recommendation — instead of asking
